@@ -28,8 +28,8 @@ def proof_of_work(last_proof):
     proof_found = False
 
     while not proof_found:
-        proof_found = valid_proof(last_hash, proof)
-        
+        proof_found = valid_proof(last_proof, proof)
+
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
 
@@ -46,7 +46,9 @@ def valid_proof(last_hash, proof):
     guess = f'{last_hash}{proof}'.encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
     lead_sequence = guess_hash[0:6]
-    end_sequence = last_hash[-1:6] # Need to get the correct ending slice.
+    end_sequence = last_hash[::-1] # Reverse the hash end_sequence = "654321999..."
+    end_sequence = end_sequence[:6] # Get the first 6 items of the reversed hash : "654321"
+    end_sequence = end_sequence[::-1] # Reverse them again : "123456"
 
     if lead_sequence == end_sequence:
         return True
@@ -82,7 +84,7 @@ if __name__ == '__main__':
         new_proof = proof_of_work(data.get('proof'))
 
         post_data = {"proof": new_proof,
-                     "id": id}
+                    "id": id}
 
         r = requests.post(url=node + "/mine", json=post_data)
         data = r.json()
