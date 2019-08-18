@@ -25,6 +25,11 @@ def proof_of_work(last_proof):
     proof = 0
     #  TODO: Your code here
 
+    proof_found = False
+
+    while not proof_found:
+        proof_found = valid_proof(last_hash, proof)
+        
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
 
@@ -38,8 +43,15 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    pass
+    guess = f'{last_hash}{proof}'.encode()
+    guess_hash = hashlib.sha256(guess).hexdigest()
+    lead_sequence = guess_hash[0:6]
+    end_sequence = last_hash[-1:6] # Need to get the correct ending slice.
 
+    if lead_sequence == end_sequence:
+        return True
+    else:
+        return False
 
 if __name__ == '__main__':
     # What node are we interacting with?
