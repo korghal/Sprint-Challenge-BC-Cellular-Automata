@@ -20,15 +20,18 @@ def proof_of_work(last_proof):
     """
 
     start = timer()
-
+    print(last_proof)
     print("Searching for next proof")
-    proof = 0
+    proof = last_proof
+    last_hash = f'{last_proof}'.encode()
+    last_hash = hashlib.sha256(last_hash).hexdigest()
     #  TODO: Your code here
 
     proof_found = False
 
     while not proof_found:
-        proof_found = valid_proof(last_proof, proof)
+        proof_found = valid_proof(last_hash, proof)
+        proof += 1
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -43,13 +46,14 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    guess = f'{last_hash}{proof}'.encode()
+    guess = f'{proof}'.encode()
     guess_hash = hashlib.sha256(guess).hexdigest()
     lead_sequence = guess_hash[0:6]
-    end_sequence = last_hash[::-1] # Reverse the hash end_sequence = "654321999..."
+    str_last_hash = str(last_hash)
+    end_sequence = str_last_hash[::-1] # Reverse the hash end_sequence = "654321999..."
     end_sequence = end_sequence[:6] # Get the first 6 items of the reversed hash : "654321"
     end_sequence = end_sequence[::-1] # Reverse them again : "123456"
-
+    #print(f'lead_sequence: {lead_sequence}, end_sequence: {end_sequence}')
     if lead_sequence == end_sequence:
         return True
     else:
@@ -60,7 +64,8 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         node = sys.argv[1]
     else:
-        node = "https://lambda-coin.herokuapp.com"
+        #node = "https://lambda-coin.herokuapp.com"
+        node = "https://lambda-coin-test-2.herokuapp.com"
 
     coins_mined = 0
 

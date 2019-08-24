@@ -4,7 +4,22 @@ def get_new_value(old_gen, old_automata):
     # TBC - add code to generate the next row of cells,
     # then replace the return statement below to
     # return the updated automata
-    return old_automata
+    
+    # old_automata is 49*49 = 2401 cells
+    # The current generation +1 is the 'row' we need to look at.
+    # A row is 49 cells across
+    # A column is 49 cells down
+    '''
+    Row indexes = rowNumber * (SQ_NUM - 1)
+    '''
+    new_automata = old_automata
+    row = old_gen + SQ_NUM
+    print(row)
+    for i in range(0, SQ_NUM):
+        print(i)
+        new_automata[row + i] = 1
+
+    return new_automata
 
 # Define some colors and other constants
 BLACK = (0, 0, 0)
@@ -28,7 +43,7 @@ running = True
 
 # Assign middle of first row to 1
 automata[SQ_NUM//2] = 1
-
+#automata[SQ_NUM//2 + SQ_NUM] = 1
 
 # Add a title
 pygame.display.set_caption("Wolfram's Rule 126")
