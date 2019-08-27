@@ -13,11 +13,40 @@ def get_new_value(old_gen, old_automata):
     Row indexes = rowNumber * (SQ_NUM - 1)
     '''
     new_automata = old_automata
-    row = old_gen + SQ_NUM
-    print(row)
+    row = (old_gen+1) * SQ_NUM
+    prev_row = (old_gen) * SQ_NUM 
+    
+
     for i in range(0, SQ_NUM):
-        print(i)
-        new_automata[row + i] = 1
+        # Get the three squares above this one
+        # We're currently at row + i 
+        # LEFT = (prev_row + i) - 1
+        # CENTER = (prev_row + i)
+        # RIGHT = (prev_row + i) + 1
+        
+        # Check left
+        left = old_automata[(prev_row + i) - 1]
+        center = old_automata[prev_row + i]
+        right = old_automata[(prev_row + i) + 1]
+        print(left)
+        print(center)
+        print(right)
+        if left and center and right == 0:
+            new_automata[row + i] = 0
+        elif left and center == 0 and right == 1:
+            new_automata[row + i] = 1
+        elif left and right == 0 and center == 1:
+            new_automata[row + i] = 1
+        elif left == 0 and center and right == 1:
+            new_automata[row + i] = 1
+        elif left == 1 and center and right == 0:
+            new_automata[row + i] = 1
+        elif left and right == 1 and center == 0:
+            new_automata[row + i] = 1
+        elif left and center == 1 and right == 0:
+            new_automata[row + i] = 1
+        elif left and center and right == 1:
+            new_automata[row + i] = 0
 
     return new_automata
 
